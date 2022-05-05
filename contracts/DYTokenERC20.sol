@@ -19,6 +19,7 @@ constructor(address _underlying,
   }
 
   function depositCoin(address _to, address _toVault) public override payable {
+    // 鎖死 depositCoin 功能
     revert("DO_NOT_DEPOSIT_COIN");
   }
 

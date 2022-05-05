@@ -29,8 +29,8 @@ contract StrategyForPancakeLP is BaseStrategy {
 
   constructor(address _controller, address _fee, address _want, address _router, address _master, uint _pid)
     BaseStrategy(_controller, _fee, _want, IMasterChef(_master).cake()) {
-    router = _router;
-    masterChef = _master;
+    router = _router;//?
+    masterChef = _master;//?
     pid = _pid;
 
     token0 = IPair(_want).token0();
