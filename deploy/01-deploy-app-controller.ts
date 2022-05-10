@@ -26,26 +26,11 @@ const deployAppController: DeployFunction = async function (
     process.env.ETHERSCAN_API_KEY
   ) {
     await verify(appController.address, []);
+  log(`Verified contract ${appController.address}`);
   }
   log(`Delegating to ${deployer}`);
-  await delegate(appController.address, deployer);
-  log("Delegated!");
 };
 
-const delegate = async (
-  appControllerAddress: string,
-  delegatedAccount: string
-) => {
-  const appController = await ethers.getContractAt(
-    "AppController",
-    appControllerAddress
-  );
-  const transactionResponse = await appController.delegate(delegatedAccount);
-  await transactionResponse.wait(1);
-  console.log(
-    `Checkpoints: ${await appController.numCheckpoints(delegatedAccount)}`
-  );
-};
 
 export default deployAppController;
 deployAppController.tags = ["all", "controller"];
