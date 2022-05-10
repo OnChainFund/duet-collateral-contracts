@@ -252,7 +252,9 @@ contract AppController is Constants, IController, OwnableUpgradeable {
     (uint totalDepositValue, uint totalBorrowValue) = userValues(_borrower, true);
     return totalDepositValue * PercentBase < totalBorrowValue * liquidateRate;
   }
-
+  /**
+  * @notice 
+  */
   function accVaultVaule(address _user, EnumerableSet.AddressSet storage set, bool _dp) internal view returns(uint totalValue) {
     uint len = set.length();
     for (uint256 i = 0; i < len; i++) {
@@ -260,7 +262,9 @@ contract AppController is Constants, IController, OwnableUpgradeable {
       totalValue += IVault(vault).userValue(_user, _dp);
     }
   }
-
+  /**
+  * @notice 
+  */
   function accPendingValue(address _user, EnumerableSet.AddressSet storage set, IVault vault, int amount, bool _dp) internal view returns(uint totalValue) {
     uint len = set.length();
     bool existVault = false;
@@ -307,7 +311,9 @@ contract AppController is Constants, IController, OwnableUpgradeable {
 
     require(totalDepositValue * PercentBase >= pendingBrorowValue * collateralRate, "LOW_COLLATERAL");
   }
-
+  /**
+  * @notice 
+  */
   function beforeWithdraw(address _user, address _vault, uint256 _amount) external view {
     VaultState memory state = vaultStates[_vault];
     require(state.enabled && state.enableWithdraw, "WITHDRAW_DISABLED");
@@ -316,12 +322,16 @@ contract AppController is Constants, IController, OwnableUpgradeable {
     uint totalBorrowValue = accVaultVaule(_user, userJoinedBorrowVaults[_user], true);
     require(pendingDepositValue * PercentBase >= totalBorrowValue * collateralRate, "LOW_COLLATERAL");
   }
-
+  /**
+  * @notice 
+  */
   function beforeRepay(address _repayer, address _vault, uint256 _amount) external view {
     VaultState memory state =  vaultStates[_vault];
     require(state.enabled && state.enableRepay, "REPAY_DISABLED");
   }
-
+  /**
+  * @notice 
+  */
   function liquidate(address _borrower, bytes calldata data) external {
     address liquidator = msg.sender;
 
@@ -346,7 +356,9 @@ contract AppController is Constants, IController, OwnableUpgradeable {
       v.liquidate(liquidator, _borrower, data);
     }
   }
-
+  /**
+  * @notice 
+  */
   function beforeLiquidate(address _borrower, address _vault) internal view {
     VaultState memory state =  vaultStates[_vault];
     require(state.enabled && state.enableLiquidate, "LIQ_DISABLED");
