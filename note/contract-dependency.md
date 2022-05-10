@@ -105,3 +105,19 @@ onlyOwner -> 修飾function,只有 onlyOwner 才有權限調用
 ##### 方法
 renounceOwnership->離開沒有所有者的合同。 將無法再調用 `onlyOwner` 函數。 只能由當前所有者調用。
 transferOwnership->將合約的所有權轉移到一個新賬戶（`newOwner`）。 只能由當前所有者調用。
+
+### ReentrancyGuardUpgradeable.sol
+[link](https://github.com/OpenZeppelin/openzeppelin-contracts-upgradeable/blob/master/contracts/security/ReentrancyGuardUpgradeable.sol)
+#### 簡介
+合同模塊，有助於防止對函數的可重入調用。
+從 `ReentrancyGuard` 繼承將使 {nonReentrant} 修飾符可用，它可以應用於函數以確保沒有對它們的嵌套（可重入）調用。
+請注意，因為只有一個 `nonReentrant` 守衛，標記為 `nonReentrant` 的函數可能不會相互調用。 這可以通過將這些函數設為“private”，然後向它們添加“external”“nonReentrant”入口點來解決。
+
+#### 方法
+__ReentrancyGuard_init
+__ReentrancyGuard_init_unchained
+#### 修飾器
+##### nonReentrant
+防止合約直接或間接調用自身。
+不支持從另一個 `nonReentrant` 函數調用 `nonReentrant` 函數。
+可以通過將 `nonReentrant` 函數設置為外部函數並使其調用執行實際工作的 `private` 函數來防止這種情況發生。
