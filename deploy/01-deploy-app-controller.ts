@@ -26,11 +26,10 @@ const deployAppController: DeployFunction = async function (
     process.env.ETHERSCAN_API_KEY
   ) {
     await verify(appController.address, []);
-  log(`Verified contract ${appController.addres_updateJoinStatuss
+    log(`verified contract ${appController.address}`);
   }
   log(`Delegating to ${deployer}`);
 };
-
 
 export default deployAppController;
 deployAppController.tags = ["all", "controller"];
