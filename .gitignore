@@ -24,3 +24,4 @@ deployments/
 coverage/
 node_modules/
 temp/
+typechain-types/
