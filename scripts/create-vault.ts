@@ -15,13 +15,13 @@ export async function createVault(
   functionToCall: string,
   proposalDescription: string
 ) {
+  const appController = await ethers.getContract("AppController");
+  const feeConf = await ethers.getContract("FeeConf");
   const singleFarmingVault = await ethers.getContract("SingleFarmingVault");
+  const usdc = "0xB97EF9Ef8734C71904D8002F8b6Bc66Dd9c48a6E";
 
   // initialize the vault
-  singleFarmingVault.initialize(_controller,_feeConf,_underlying);
-
-
-
+  singleFarmingVault.initialize(appController, feeConf, usdc);
 }
 
 createVault([NEW_STORE_VALUE], FUNC, PROPOSAL_DESCRIPTION)
