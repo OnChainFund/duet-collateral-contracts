@@ -67,3 +67,9 @@ interface (有點 mixin 的感覺)
 - _withdraw
 - _liquidate
 - _updateJoinStatus
+
+### SingleFarmingVault
+- initialize
+- underlyingTransferIn
+- underlyingTransferOut
+- deposit
