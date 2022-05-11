@@ -137,7 +137,7 @@ contract AppController is Constants, IController, OwnableUpgradeable {
     emit CollateralRateChanged(collateralRate);
   }
 
-  // @dev 允许为每个底层资产设置不同的价格预言机 折扣率、溢价率
+  // @dev 允许为每个底层资产设置不同的价格预言机 折扣率(dr)、溢价率(pr)
   function setOracles(address _underlying, address _oracle, uint16 _discount, uint16 _premium) external onlyOwner {
     require(_oracle != address(0), "INVALID_ORACLE");
     require(_discount <= PercentBase, "DISCOUT_TOO_BIG");
@@ -157,23 +157,28 @@ contract AppController is Constants, IController, OwnableUpgradeable {
       (oracle0, dr0, pr0) = getValueConf(token0);
       (oracle1, dr1, pr1) = getValueConf(token1);
   } 
-
-  // get DiscountRate and PremiumRate
+  /**
+  * @notice 獲取單個 token 分別的预言机 折扣率(dr)、溢价率(pr) 
+  */
   function getValueConf(address _underlying) public view returns (address oracle, uint16 dr, uint16 pr) {
     ValueConf memory conf = valueConfs[_underlying];
     oracle = conf.oracle;
     dr = conf.dr;
     pr = conf.pr;
   }
-
-  // vtype 1 : for deposit vault 2: for mint vault
+  /**
+  * @notice  為dyToken設定vault的address和type
+  */
   function setVault(address _dyToken, address _vault, uint vtype) external onlyOwner {
+    // vtype 1 : for deposit vault 2: for mint vault
     require(IVault(_vault).isDuetVault(), "INVALIE_VALUT");
     address old = dyTokenVaults[_dyToken];
     dyTokenVaults[_dyToken] = _vault;
     emit DTokenVaultChanged(_dyToken, old, _vault, vtype);
   }
-
+  /**
+  * @notice  使用者退出 vault
+  */
   function joinVault(address _user, bool isDepositVault) external {
     address vault = msg.sender;
     require(vaultStates[vault].enabled, "INVALID_CALLER");
@@ -182,7 +187,9 @@ contract AppController is Constants, IController, OwnableUpgradeable {
     require(set.length() < JOINED_VAULT_LIMIT, "JOIN_TOO_MUCH");
     set.add(vault);
   }
-
+  /**
+  * @notice  使用者退出 vault
+  */
   function exitVault(address _user, bool isDepositVault) external {
     address vault = msg.sender;
     require(vaultStates[vault].enabled, "INVALID_CALLER");
@@ -190,18 +197,26 @@ contract AppController is Constants, IController, OwnableUpgradeable {
     EnumerableSet.AddressSet storage set = isDepositVault ? userJoinedDepositVaults[_user] : userJoinedBorrowVaults[_user];
     set.remove(vault);
   }
-
+  
+  /**
+  * @notice  設定 Vault 的狀態
+  */
   function setVaultStates(address _vault, VaultState memory _state) external onlyOwner {
     vaultStates[_vault] = _state;
     emit SetVaultStates(_vault, _state);
   }
-
+  /**
+  * @notice 使用者參與的 vault 的資訊 
+  */
   function userJoinedVaultInfoAt(address _user, bool isDepositVault, uint256 index) external view returns (address vault, VaultState memory state) {
     EnumerableSet.AddressSet storage set = isDepositVault ? userJoinedDepositVaults[_user] : userJoinedBorrowVaults[_user];
     vault = set.at(index);
     state = vaultStates[vault];
   }
 
+  /**
+  * @notice  使用者參與的 vault 數目
+  */
   function userJoinedVaultCount(address _user, bool isDepositVault) external view returns (uint256) {
     return isDepositVault ? userJoinedDepositVaults[_user].length() : userJoinedBorrowVaults[_user].length();
   }
@@ -253,8 +268,11 @@ contract AppController is Constants, IController, OwnableUpgradeable {
     return totalDepositValue * PercentBase < totalBorrowValue * liquidateRate;
   }
   /**
-  * @notice 
-  */
+    * @notice  获取用户Vault準確總价值(給userValues調用)
+    * @param  _user 存款人
+    * @param  set ?
+    * @param _dp  是否折价(Discount) 和 溢价(Premium)
+    */
   function accVaultVaule(address _user, EnumerableSet.AddressSet storage set, bool _dp) internal view returns(uint totalValue) {
     uint len = set.length();
     for (uint256 i = 0; i < len; i++) {
@@ -263,8 +281,11 @@ contract AppController is Constants, IController, OwnableUpgradeable {
     }
   }
   /**
-  * @notice 
-  */
+    * @notice  预测用户更改Vault后的準確總价值(給userPendingValues調用)
+    * @param  _user 存款人
+    * @param  set ?
+    * @param _dp  是否折价(Discount) 和 溢价(Premium)
+    */
   function accPendingValue(address _user, EnumerableSet.AddressSet storage set, IVault vault, int amount, bool _dp) internal view returns(uint totalValue) {
     uint len = set.length();
     bool existVault = false;
@@ -287,20 +308,20 @@ contract AppController is Constants, IController, OwnableUpgradeable {
 
   /**
     * @notice 存款前风控检查
-    * param  user 存款人
+    * @param  _user 存款人
     * @param _vault Vault地址
-    * param  amount 存入的标的资产数量
+    * @param  amount 存入的标的资产数量
     */
-  function beforeDeposit(address , address _vault, uint) external view {
+  function beforeDeposit(address _user, address _vault, uint) external view {
     VaultState memory state =  vaultStates[_vault];
     require(state.enabled && state.enableDeposit, "DEPOSITE_DISABLE");
   }
 
   /**
-    @notice 借款前风控检查
-    @param _user 借款人
-    @param _vault 借贷市场地址
-    @param _amount 待借标的资产数量
+    * @notice 借款前风控检查
+    * @param _user 借款人
+    * @param _vault 借贷市场地址
+    * @param _amount 待借标的资产数量
     */
   function beforeBorrow(address _user, address _vault, uint256 _amount) external view {
     VaultState memory state =  vaultStates[_vault];
@@ -312,8 +333,11 @@ contract AppController is Constants, IController, OwnableUpgradeable {
     require(totalDepositValue * PercentBase >= pendingBrorowValue * collateralRate, "LOW_COLLATERAL");
   }
   /**
-  * @notice 
-  */
+    * @notice 提領前风控检查
+    * @param _user 提領人
+    * @param _vault 提領vault地址
+    * @param _amount 待提領的资产数量
+    */
   function beforeWithdraw(address _user, address _vault, uint256 _amount) external view {
     VaultState memory state = vaultStates[_vault];
     require(state.enabled && state.enableWithdraw, "WITHDRAW_DISABLED");
@@ -323,15 +347,20 @@ contract AppController is Constants, IController, OwnableUpgradeable {
     require(pendingDepositValue * PercentBase >= totalBorrowValue * collateralRate, "LOW_COLLATERAL");
   }
   /**
-  * @notice 
-  */
+    * @notice 還款前风控检查
+    * @param _repayer 還款人
+    * @param _vault 還款vault地址
+    * @param _amount 待還標的资产数量
+    */
   function beforeRepay(address _repayer, address _vault, uint256 _amount) external view {
     VaultState memory state =  vaultStates[_vault];
     require(state.enabled && state.enableRepay, "REPAY_DISABLED");
   }
   /**
-  * @notice 
-  */
+    * @notice 清算 
+    * @param _borrower 借款人
+    * @param data 清算資料 
+    */
   function liquidate(address _borrower, bytes calldata data) external {
     address liquidator = msg.sender;
 
@@ -357,9 +386,11 @@ contract AppController is Constants, IController, OwnableUpgradeable {
     }
   }
   /**
-  * @notice 
-  */
-  function beforeLiquidate(address _borrower, address _vault) internal view {
+    * @notice 清算前风控检查 
+    * @param _borrower 借款人
+    * @param _vault 清算vault地址
+    */
+  function (address _borrower, address _vault) internal view {
     VaultState memory state =  vaultStates[_vault];
     require(state.enabled && state.enableLiquidate, "LIQ_DISABLED");
   }
