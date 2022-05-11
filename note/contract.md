@@ -69,7 +69,13 @@ interface (有點 mixin 的感覺)
 - _updateJoinStatus
 
 ### SingleFarmingVault
+- public
+  - underlyingAmountValue
 - initialize
 - underlyingTransferIn
 - underlyingTransferOut
 - deposit
+- depositTo
+- syncDeposit
+- withdraw
+- withdrawTo

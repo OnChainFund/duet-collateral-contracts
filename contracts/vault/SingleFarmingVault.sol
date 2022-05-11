@@ -28,6 +28,11 @@ contract SingleFarmingVault is DepositVaultBase {
   address public underlyingToken;
   uint internal underlyingScale;
 
+  /**
+    * @notice Initialize the contract
+    * @param _controller address of controller contract
+    * @param _feeConf   address fee configuration contract
+    */
   function initialize(
     address _controller,
     address _feeConf,
