@@ -71,11 +71,12 @@ interface (有點 mixin 的感覺)
 ### SingleFarmingVault
 - public
   - underlyingAmountValue
-- initialize
-- underlyingTransferIn
-- underlyingTransferOut
-- deposit
-- depositTo
-- syncDeposit
-- withdraw
-- withdrawTo
+- external
+  - initialize
+  - underlyingTransferIn
+  - underlyingTransferOut
+  - deposit
+  - depositTo
+  - syncDeposit
+  - withdraw
+  - withdrawTo
