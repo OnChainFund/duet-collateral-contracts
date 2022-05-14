@@ -38,7 +38,7 @@ constructor(address _underlying,
     
     uint shares = 0;
     if (totalSupply() == 0) {
-      require(_amount >= 10000, "too small");
+      require(_amount >= 100, "too small");
       shares = _amount;
     } else {
       shares = _amount * totalSupply() / total;
