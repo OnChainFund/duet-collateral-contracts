@@ -1,9 +1,9 @@
 import { ethers } from "hardhat";
-import { ERC20_ABI, WAVAX_ABI } from "./abi";
+import { ERC20_ABI, WAVAX_ABI } from "./utils/abi";
 import { HardhatRuntimeEnvironment } from "hardhat/types";
 import "@typechain/hardhat";
-import { getBalance } from "./utils";
-import { USDC, WAVAX } from "./const";
+import { getBalance } from "./utils/utils";
+import { USDC, WAVAX } from "./utils/const";
 
 const hre = require("hardhat");
 export async function createVault(hre: HardhatRuntimeEnvironment) {
@@ -15,24 +15,18 @@ export async function createVault(hre: HardhatRuntimeEnvironment) {
   const feeConf = await ethers.getContract("FeeConf");
   const singleFarmingVault = await ethers.getContract("SingleFarmingVault");
 
-  // 新增外部合約
-
   // wavax 操作
   const wavaxContract = new ethers.Contract(WAVAX, WAVAX_ABI, ethers.provider);
 
   // 理論上要使用 dytoken 這裡就會用一般的 token 代替
-
   // initialize the vault
-  //await appController.initialize();
-  const usdc = new ethers.Contract(USDC, ERC20_ABI, ethers.provider);
-  /*
-  await singleFarmingVault
+  const initTx = await singleFarmingVault
     .connect(accounts[0])
     .initialize(appController.address, feeConf.address, WAVAX, {
       gasLimit: 20e4,
       //gasPrice: 20e14,
     });
-    */
+
   // deposit
   // 換 wavax
   await getBalance(wavaxContract, accounts[0].address);
@@ -40,7 +34,7 @@ export async function createVault(hre: HardhatRuntimeEnvironment) {
     .connect(accounts[0])
     .deposit({ value: BigInt(1e18), gasPrice: 20e12 });
   await getBalance(wavaxContract, accounts[0].address);
-  await singleFarmingVault.connect(accounts[0]).deposit(WAVAX, 1);
+  //await singleFarmingVault.connect(accounts[0]).deposit(WAVAX, 1);
   //await singleFarmingVault.deposit(usdt, 10);// 這行理論上應該要報錯,但沒有
   // depositTo
   //singleFarmingVault.depositTo(usdc, 10);
