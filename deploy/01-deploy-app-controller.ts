@@ -28,6 +28,14 @@ const deployAppController: DeployFunction = async function (
     await verify(appController.address, []);
     log(`verified contract ${appController.address}`);
   }
+  // init
+  const accounts = await hre.ethers.getSigners();
+  const appControllerContract = await ethers.getContract("AppController");
+
+  await appControllerContract.connect(accounts[0]).initialize({
+    gasLimit: 20e4,
+    //gasPrice: 20e14,
+  });
   log(`Delegating to ${deployer}`);
 };
 

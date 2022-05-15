@@ -34,6 +34,12 @@ contract LpFarmingVault is DepositVaultBase {
   address public token1;
   //uint internal decimal1Scale; // no used again
 
+  /**
+    * @notice init
+    * @param _controller controller address
+    * @param _feeConf fee config address 
+    * @param _underlying Lp pair address 
+    */
   function initialize(
     address _controller,
     address _feeConf,
@@ -45,11 +51,20 @@ contract LpFarmingVault is DepositVaultBase {
     token1 = IPair(pair).token1();
   }
 
-
+  /**
+    * @notice transfer underlying token (internal method)
+    * @param sender sender address
+    * @param amount amount to transfer
+    */
   function underlyingTransferIn(address sender, uint256 amount) internal virtual override {
     IERC20Upgradeable(underlying).safeTransferFrom(sender, address(this), amount);
   }
 
+  /*
+    * @notice transfer underlying token (internal method)
+    * @param receipt receipt address
+    * @param amount amount to transfer
+    */
   function underlyingTransferOut(address receipt, uint256 amount, bool) internal virtual override {
     //  skip transfer to myself
     if (receipt == address(this)) {
@@ -59,7 +74,11 @@ contract LpFarmingVault is DepositVaultBase {
     require(receipt != address(0), "receipt is empty");
     IERC20Upgradeable(underlying).safeTransfer(receipt, amount);
   }
-
+  /*
+    * @notice deposite
+    * @param receipt receipt address
+    * @param amount amount to transfer
+    */
   function deposit(address dtoken, uint256 amount) external virtual override {
     require(dtoken == address(underlying), "TOKEN_UNMATCH");
     underlyingTransferIn(msg.sender, amount);

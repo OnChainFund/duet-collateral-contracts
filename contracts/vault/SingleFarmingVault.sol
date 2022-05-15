@@ -31,7 +31,8 @@ contract SingleFarmingVault is DepositVaultBase {
   /**
     * @notice Initialize the contract
     * @param _controller address of controller contract
-    * @param _feeConf   address fee configuration contract
+    * @param _feeConf address fee configuration contract
+    * @param _underlying address underlying token contract (dytoken)
     */
   function initialize(
     address _controller,

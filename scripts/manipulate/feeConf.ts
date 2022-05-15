@@ -3,7 +3,7 @@ import { ERC20_ABI, WAVAX_ABI } from "../utils/abi";
 import { HardhatRuntimeEnvironment } from "hardhat/types";
 import "@typechain/hardhat";
 import { getBalance } from "../utils/utils";
-import { USDC, WAVAX } from "../utils/const";
+import { USDC, WAVAX } from "../../utils/const";
 
 const hre = require("hardhat");
 export async function feeConf(hre: HardhatRuntimeEnvironment) {
