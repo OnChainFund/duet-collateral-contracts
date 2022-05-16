@@ -2,8 +2,8 @@ import { ethers } from "hardhat";
 import { WAVAX_ABI } from "./utils/abi";
 import { HardhatRuntimeEnvironment } from "hardhat/types";
 import "@typechain/hardhat";
-import { getBalance } from "./utils/utils";
-import { USDC, WAVAX } from "../utils/const";
+import { getBalance, getTotalSupply } from "./utils/utils";
+import { USDC, WAVAX, ZERO } from "../utils/const";
 
 const hre = require("hardhat");
 export async function createVault(hre: HardhatRuntimeEnvironment) {
@@ -29,24 +29,12 @@ export async function createVault(hre: HardhatRuntimeEnvironment) {
       //gasPrice: 20e14,
     });
   */
-
-  // deposit
-
   // deposite 前要先 setVault (在 controller 設定哪個 dyToken 對應到哪個 vault)
   await appController
     .connect(accounts[0])
     .setVault(dyWavax.address, singleFarmingVault.address, 1);
   console.log("appController setVault");
-  
-  // 換 wavax
-  await getBalance(wavax, accounts[0].address, "WAVAX");
-  console.log("exchanging AVAX to WAVAX");
-  await wavax
-    .connect(accounts[0])
-    .deposit({ value: BigInt(1e21), gasPrice: 20e12 });
-  await getBalance(wavax, accounts[0].address, "WAVAX");
-  await wavax.connect(accounts[0]).approve(dyWavax.address, 101);
-  console.log("approve WAVAX spend");
+
   // 設定 vault 狀態
   await appController.connect(accounts[0]).setVaultStates(
     singleFarmingVault.address,
@@ -64,21 +52,42 @@ export async function createVault(hre: HardhatRuntimeEnvironment) {
     }
   );
 
+  // deposit
+
+
+  // to msg.sender
+  // 換 wavax
+  await getBalance(wavax, accounts[0].address, "WAVAX");
+  console.log("exchanging AVAX to WAVAX");
+  await wavax
+    .connect(accounts[0])
+    .deposit({ value: BigInt(1e21), gasPrice: 20e12 });
+  await getBalance(wavax, accounts[0].address, "WAVAX");
+  await wavax.connect(accounts[0]).approve(dyWavax.address, BigInt(1e18));
+  console.log("approve WAVAX spend");
   console.log("appController set vault state");
-  await dyWavax.connect(accounts[0]).deposit(101, singleFarmingVault.address, {
-    gasLimit: 40e4,
-    //gasPrice: 20e14,
-  });
+  await dyWavax
+    .connect(accounts[0])
+    .deposit(BigInt(1e18), ZERO, {
+      gasLimit: 40e4,
+      //gasPrice: 20e14,
+    });
+
+  await getTotalSupply(dyWavax);
 
   console.log("deposit dyWavax into SingleFarmingVault");
 
   await getBalance(wavax, accounts[0].address, "WAVAX");
-
   await getBalance(dyWavax, accounts[0].address, "dyWavax");
 
   // withdraw
   // unpack = true
-
+  /*
+  await dyWavax.connect(accounts[0]).withdraw(101, true, {
+    gasLimit: 40e4,
+    //gasPrice: 20e14,
+  });
+  */
 
   //await singleFarmingVault.connect(accounts[0]).deposit(WAVAX, 1);
   //await singleFarmingVault.deposit(usdt, 10);// 這行理論上應該要報錯,但沒有

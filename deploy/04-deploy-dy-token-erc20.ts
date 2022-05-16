@@ -16,7 +16,7 @@ const dyTokenERC20: DeployFunction = async function (
   const appController = await ethers.getContract("AppController");
   const lpFarmingVault = await deploy("DYTokenERC20", {
     from: deployer,
-    args: [WAVAX, "DYWAVAX", appController.address],
+    args: [WAVAX, "WAVAX", appController.address],
     log: true,
     // we need to wait if on a live network so we can verify properly
     waitConfirmations: networkConfig[network.name].blockConfirmations || 1,
