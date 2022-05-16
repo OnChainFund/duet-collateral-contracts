@@ -1,5 +1,5 @@
 import { ethers, network } from "hardhat";
-import { ERC20_ABI } from "./abi";
+import { ERC20_ABI } from "../../utils/abi";
 import { formatUnits } from "ethers/lib/utils";
 
 export async function getBalance(

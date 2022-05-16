@@ -33,3 +33,9 @@ function beforeDeposit(address , address _vault, uint) external view {
 }
 ```
 試著把state.enabled 和state.enableDeposit 轉乘 true
+
+## Error: VM Exception while processing transaction: reverted with reason string 'VALIDVAULT_UNINIT'
+-> use AppController to initValidVault
+-> write in deploy script
+
+## Error: Transaction reverted: function call to a non-contract account (when withdraw)

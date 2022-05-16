@@ -33,7 +33,9 @@ const deploySingleFarmingVault: DeployFunction = async function (
   const feeConf = await ethers.getContract("FeeConf");
   const DYWAVAX = await ethers.getContract("DYTokenERC20");
   const appController = await ethers.getContract("AppController");
-  const singleFarmingVaultContract = await ethers.getContract("SingleFarmingVault");
+  const singleFarmingVaultContract = await ethers.getContract(
+    "SingleFarmingVault"
+  );
   await singleFarmingVaultContract
     .connect(accounts[0])
     .initialize(appController.address, feeConf.address, DYWAVAX.address, {
@@ -41,6 +43,7 @@ const deploySingleFarmingVault: DeployFunction = async function (
       //gasPrice: 20e14,
     });
   log(`Delegating to ${deployer}`);
+
 };
 
 export default deploySingleFarmingVault;
