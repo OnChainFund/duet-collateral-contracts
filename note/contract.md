@@ -68,3 +68,15 @@ interface (有點 mixin 的感覺)
 - _liquidate
 - _updateJoinStatus
 
+### SingleFarmingVault
+- public
+  - underlyingAmountValue
+- external
+  - initialize
+  - underlyingTransferIn
+  - underlyingTransferOut
+  - deposit
+  - depositTo
+  - syncDeposit
+  - withdraw
+  - withdrawTo

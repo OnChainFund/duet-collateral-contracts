@@ -80,6 +80,11 @@ contract SingleFarmingVault is DepositVaultBase {
     _deposit(user, amount);
   }
 
+  /**
+    * @notice 取款
+    * @param amount 提取数量
+    * @param unpack 是否解包 underlying token
+  */
   function withdraw(uint256 amount, bool unpack) external {
     _withdraw(msg.sender, amount, unpack);
   }

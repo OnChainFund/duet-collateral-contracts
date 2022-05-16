@@ -5,7 +5,9 @@
 - [ ]  external
   - [x]  initialize
   - [x]  deposit
+  - [ ]  withdraw
+    - [ ]  unpack = true
+    - [ ]  unpack = false
   - [ ]  depositTo
   - [ ]  syncDeposit
-  - [ ]  withdraw
   - [ ]  withdrawTo
