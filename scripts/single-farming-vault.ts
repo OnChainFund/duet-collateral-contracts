@@ -1,10 +1,10 @@
 import { ethers } from "hardhat";
-import { WAVAX_ABI } from "./utils/abi";
+import { WAVAX_ABI, SingleFarmingVault_ABI } from "./utils/abi";
 import { HardhatRuntimeEnvironment } from "hardhat/types";
 import "@typechain/hardhat";
-import { getBalance, getTotalSupply } from "./utils/utils";
+import { getBalance, getTotalSupply, getUserValue } from "./utils/utils";
 import { USDC, WAVAX, ZERO } from "../utils/const";
-
+import { formatUnits } from "ethers/lib/utils";
 const hre = require("hardhat");
 export async function createVault(hre: HardhatRuntimeEnvironment) {
   // 前處理
@@ -18,6 +18,11 @@ export async function createVault(hre: HardhatRuntimeEnvironment) {
 
   // 外部合約
   const wavax = new ethers.Contract(WAVAX, WAVAX_ABI, ethers.provider);
+  const zero_vault = new ethers.Contract(
+    ZERO,
+    SingleFarmingVault_ABI,
+    ethers.provider
+  );
 
   // 理論上要使用 dytoken 這裡就會用一般的 token 代替
   // initialize -> 只能用第一次 -> 放在部署合約中
@@ -54,6 +59,33 @@ export async function createVault(hre: HardhatRuntimeEnvironment) {
 
   // deposit
 
+  // to vault
+  // 換 wavax
+
+  await getBalance(wavax, accounts[0].address, "WAVAX");
+  console.log("exchanging AVAX to WAVAX");
+  await wavax
+    .connect(accounts[0])
+    .deposit({ value: BigInt(1e18), gasPrice: 20e12 });
+  await getBalance(wavax, accounts[0].address, "WAVAX");
+  await wavax.connect(accounts[0]).approve(dyWavax.address, BigInt(1e18));
+
+  console.log("approve WAVAX spend");
+  console.log("appController set vault state");
+
+  await dyWavax.connect(accounts[0]).deposit(BigInt(1e18), singleFarmingVault.address, {
+    gasLimit: 40e4,
+    //gasPrice: 20e14,
+  });
+
+  await getTotalSupply(dyWavax);
+
+  console.log("deposit dyWavax into SingleFarmingVault");
+
+  //await getUserValue(singleFarmingVault, accounts[0].address, true);
+  //const userVaule = formatUnits(await singleFarmingVault.userValue(accounts[0], true));// 會報錯,因為價格查詢的 oracle 還沒有設定
+  /*
+   */
 
   // to msg.sender
   // 換 wavax
@@ -61,17 +93,15 @@ export async function createVault(hre: HardhatRuntimeEnvironment) {
   console.log("exchanging AVAX to WAVAX");
   await wavax
     .connect(accounts[0])
-    .deposit({ value: BigInt(1e21), gasPrice: 20e12 });
+    .deposit({ value: BigInt(1e18), gasPrice: 20e12 });
   await getBalance(wavax, accounts[0].address, "WAVAX");
   await wavax.connect(accounts[0]).approve(dyWavax.address, BigInt(1e18));
   console.log("approve WAVAX spend");
   console.log("appController set vault state");
-  await dyWavax
-    .connect(accounts[0])
-    .deposit(BigInt(1e18), ZERO, {
-      gasLimit: 40e4,
-      //gasPrice: 20e14,
-    });
+  await dyWavax.connect(accounts[0]).deposit(BigInt(1e18), ZERO, {
+    gasLimit: 40e4,
+    //gasPrice: 20e14,
+  });
 
   await getTotalSupply(dyWavax);
 

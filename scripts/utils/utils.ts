@@ -19,3 +19,9 @@ export async function getTotalSupply(
   console.log((await contract.symbol()) + "totalSupply : " + totalSupply);
   return totalSupply;
 }
+
+export async function getUserValue(contract: any, address: string, dp: boolean) {
+  const userVaule = formatUnits(await contract.userValue(address, dp));
+  console.log("user value is : " + userVaule);
+  return userVaule;
+}
