@@ -25,3 +25,14 @@ export async function getUserValue(contract: any, address: string, dp: boolean) 
   console.log("user value is : " + userVaule);
   return userVaule;
 }
+
+export async function getPrice(
+  contract: any,
+  address: string,
+
+) {
+  const priceString = (formatUnits(await contract.getPrice(address)));
+  const priceNumber: number = Number(priceString)*1e10;
+  console.log("price is : " + priceNumber);
+  return priceNumber;
+}

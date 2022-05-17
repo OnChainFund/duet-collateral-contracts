@@ -39,3 +39,4 @@ function beforeDeposit(address , address _vault, uint) external view {
 -> write in deploy script
 
 ## Error: Transaction reverted: function call to a non-contract account (when withdraw)
+-> set oracle for asset

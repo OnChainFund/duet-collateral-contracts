@@ -4,7 +4,7 @@ import verify from "../helper-functions";
 import { networkConfig, developmentChains } from "../helper-hardhat-config";
 import { ethers } from "hardhat";
 import { WAVAX, AVAX_USD_CHAINLINK } from "../utils/const";
-import { WAVAX_ABI } from "../utils/abi";
+import { WAVAX_ABI, CHAINLINK_DATA_FEED } from "../utils/abi";
 
 const deploySingleFarmingVault: DeployFunction = async function (
   hre: HardhatRuntimeEnvironment
@@ -30,6 +30,11 @@ const deploySingleFarmingVault: DeployFunction = async function (
   const dyWavax = await ethers.getContract("DYTokenERC20");
 
   const wavax = new ethers.Contract(WAVAX, WAVAX_ABI, ethers.provider);
+  const avax_usd_chainlink = new ethers.Contract(
+    AVAX_USD_CHAINLINK,
+    CHAINLINK_DATA_FEED,
+    ethers.provider
+  );
   await appController
     .connect(accounts[0])
     .setOracles(WAVAX, AVAX_USD_CHAINLINK,0,10000);
