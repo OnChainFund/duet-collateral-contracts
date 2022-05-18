@@ -3,6 +3,7 @@ import { DeployFunction } from "hardhat-deploy/types";
 import verify from "../helper-functions";
 import { networkConfig, developmentChains } from "../helper-hardhat-config";
 import { ethers } from "hardhat";
+import { WAVAX, AVAX_USD_CHAINLINK } from "../utils/const";
 
 const deploySingleTokenUsdOracle: DeployFunction = async function (
   hre: HardhatRuntimeEnvironment
@@ -29,9 +30,13 @@ const deploySingleTokenUsdOracle: DeployFunction = async function (
     await verify(singleTokenUsdOracle.address, []);
     log(`Verified contract ${singleTokenUsdOracle.address}`);
   }
-  log(`Delegating to ${deployer}`);
 
-  // initialize
+  // setOracle
+  const singleTokenUsdOracleContract = await ethers.getContract(
+    "SingleTokenUsdOracle"
+  );
+  await singleTokenUsdOracleContract.setOracle(WAVAX, AVAX_USD_CHAINLINK);
+  console.log("setOracle");
 };
 
 export default deploySingleTokenUsdOracle;

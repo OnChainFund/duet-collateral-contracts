@@ -47,7 +47,6 @@ export async function createVault(hre: HardhatRuntimeEnvironment) {
     }
   );
 
-
   // deposit
   await getBalance(wavax, accounts[0].address, "WAVAX");
   console.log("exchanging AVAX to WAVAX");
@@ -67,17 +66,20 @@ export async function createVault(hre: HardhatRuntimeEnvironment) {
       //gasPrice: 20e14,
     });
 
-  await getTotalSupply(dyWavax);
-
   console.log("deposit dyWavax into SingleFarmingVault");
-
+  await getTotalSupply(dyWavax);
+  await getBalance(wavax, accounts[0].address, "WAVAX");
   // withdraw from vault
   // unpack = true
 
-  await singleFarmingVault.connect(accounts[0]).withdraw(1, true, {
+  await singleFarmingVault.connect(accounts[0]).withdraw(BigInt(1e18), true, {
     gasLimit: 40e4,
     //gasPrice: 20e14,
   });
+
+  console.log("withdraw dyWavax from SingleFarmingVault");
+  await getTotalSupply(dyWavax);
+  await getBalance(wavax, accounts[0].address, "WAVAX");
 }
 
 createVault(hre)

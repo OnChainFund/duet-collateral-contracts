@@ -27,17 +27,10 @@ const deploySingleFarmingVault: DeployFunction = async function (
   console.log("initValidVault");
 
   // setOracles
-  const dyWavax = await ethers.getContract("DYTokenERC20");
-
-  const wavax = new ethers.Contract(WAVAX, WAVAX_ABI, ethers.provider);
-  const avax_usd_chainlink = new ethers.Contract(
-    AVAX_USD_CHAINLINK,
-    CHAINLINK_DATA_FEED,
-    ethers.provider
-  );
+  const singleTokenUsdOracle = await ethers.getContract("SingleTokenUsdOracle");
   await appController
     .connect(accounts[0])
-    .setOracles(WAVAX, AVAX_USD_CHAINLINK,0,10000);
+    .setOracles(WAVAX, singleTokenUsdOracle.address, 0, 10000);
   console.log("set Oracle to Vault");
 };
 

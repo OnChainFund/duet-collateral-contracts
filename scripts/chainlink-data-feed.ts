@@ -9,7 +9,7 @@ import "@typechain/hardhat";
 import {  getPrice} from "./utils/utils";
 import { AVAX_USD_CHAINLINK } from "../utils/const";
 const hre = require("hardhat");
-export async function createVault(hre: HardhatRuntimeEnvironment) {
+export async function oracleData(hre: HardhatRuntimeEnvironment) {
   // setOracles
   const accounts = await hre.ethers.getSigners();
   const dyWavax = await ethers.getContract("DYTokenERC20");
@@ -18,7 +18,7 @@ export async function createVault(hre: HardhatRuntimeEnvironment) {
   await getPrice(singleTokenUsdOracle, AVAX_USD_CHAINLINK);
 }
 
-createVault(hre)
+oracleData(hre)
   .then(() => process.exit(0))
   .catch((error) => {
     console.error(error);
