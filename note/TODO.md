@@ -4,7 +4,7 @@ TODO:
   - [ ] SingleFarmingVault 所有功能
     - [x] initialize
     - [x] deposit
-    - [ ] depositTo
+    - [x] depositTo
     - [ ] syncDeposit
     - [x] withdraw
     - [ ] withdrawTo
@@ -19,6 +19,12 @@ TODO:
   - [ ] Strategy2ForPancakeLP 所有功能
 - [ ] 操作 app code
   - [ ] AppController 所有功能
+  - [x] DYToken 所有功能
+    - [x] deposit
+    - [x] depositTo
+    - [x] withdraw
+    - [x] earn
+  - [ ] FeeConf 所有功能
 
 
 ## Test

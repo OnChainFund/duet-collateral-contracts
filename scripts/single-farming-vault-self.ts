@@ -47,48 +47,105 @@ export async function createVault(hre: HardhatRuntimeEnvironment) {
     }
   );
 
-  // withdraw 之前 deposit 的
-  const wavaxBalance = await getBalance(wavax, accounts[0].address, "WAVAX");
-  console.log("withdrawing all AVAX from WAVAX");
-  await wavax
-    .connect(accounts[0])
-    .withdraw((BigInt(Number(wavaxBalance) * 1e18)-BigInt(1)), { gasLimit: 40e4 });
-  await getBalance(wavax, accounts[0].address, "WAVAX");
+  // withdraw 之前 deposit 的 WAVAX
+  {
+    const wavaxBalance = await getBalance(wavax, accounts[0].address, "WAVAX");
+    if (Number(wavaxBalance) > 0) {
+    console.log("withdrawing all AVAX from WAVAX");
+    await wavax
+      .connect(accounts[0])
+      .withdraw(BigInt(Number(wavaxBalance) * 1e18) - BigInt(1), {
+        gasLimit: 40e4,
+      });
+    await getBalance(wavax, accounts[0].address, "WAVAX");
 
-  console.log("withdrawed all AVAX from WAVAX");
-  // deposit
-  await getBalance(wavax, accounts[0].address, "WAVAX");
-  console.log("exchanging AVAX to WAVAX");
-  await wavax
-    .connect(accounts[0])
-    .deposit({ value: BigInt(1e18), gasPrice: 20e12 });
-  await getBalance(wavax, accounts[0].address, "WAVAX");
-  await wavax.connect(accounts[0]).approve(dyWavax.address, BigInt(1e18));
+    console.log("withdrawed all AVAX from WAVAX");
+    } else {
+      console.log("no AVAX to withdraw");
+    }
+  }
 
-  console.log("approve WAVAX spend");
-  console.log("appController set vault state");
+  // deposit AVAX to WAVAX
+  {
+    await getBalance(wavax, accounts[0].address, "WAVAX");
+    console.log("exchanging AVAX to WAVAX");
+    await wavax
+      .connect(accounts[0])
+      .deposit({ value: BigInt(1e18), gasPrice: 20e12 });
+    await getBalance(wavax, accounts[0].address, "WAVAX");
+  }
 
-  await dyWavax
-    .connect(accounts[0])
-    .deposit(BigInt(1e18), singleFarmingVault.address, {
+  // deposit WAVAX to dyWAVAX to vault
+  {
+    await wavax.connect(accounts[0]).approve(dyWavax.address, BigInt(1e18));
+
+    console.log("approve WAVAX spend");
+    console.log("appController set vault state");
+
+    await dyWavax
+      .connect(accounts[0])
+      .deposit(BigInt(1e18), singleFarmingVault.address, {
+        gasLimit: 40e4,
+        //gasPrice: 20e14,
+      });
+
+    console.log("deposited dyWavax into SingleFarmingVault");
+    await getTotalSupply(dyWavax);
+    await getBalance(wavax, accounts[0].address, "WAVAX");
+  }
+
+  // withdraw dyWAVAX from vault
+  {
+    // unpack = true -> 取出並還給你 WAVAX
+    // unpack = false -> 取出並還給你 dyWAVAX
+    await singleFarmingVault.connect(accounts[0]).withdraw(BigInt(1e18), true, {
       gasLimit: 40e4,
-      //gasPrice: 20e14,
     });
 
-  console.log("deposited dyWavax into SingleFarmingVault");
-  await getTotalSupply(dyWavax);
-  await getBalance(wavax, accounts[0].address, "WAVAX");
-  // withdraw from vault
-  // unpack = true
+    console.log("withdraw dyWavax from SingleFarmingVault");
+    await getTotalSupply(dyWavax);
+    await getBalance(wavax, accounts[0].address, "WAVAX");
+  }
 
-  await singleFarmingVault.connect(accounts[0]).withdraw(BigInt(1e18), true, {
-    gasLimit: 40e4,
-    //gasPrice: 20e14,
-  });
+  // depositTo
+  {
+    // deposit WAVAX to dyWAVAX to vault for other address
+    await wavax.connect(accounts[0]).approve(dyWavax.address, BigInt(1e18));
+    await dyWavax
+      .connect(accounts[0])
+      .depositTo(
+        accounts[1].address,
+        BigInt(1e18),
+        singleFarmingVault.address,
+        {
+          gasLimit: 40e4,
+          //gasPrice: 20e14,
+        }
+      );
+    await getTotalSupply(dyWavax);
+    await getBalance(wavax, accounts[1].address, "WAVAX");
+  }
+  // withdrawTo
+  {
+    await singleFarmingVault
+      .connect(accounts[1])
+      .withdrawTo(accounts[0].address, BigInt(1e18), true, {
+        gasLimit: 40e4,
+      });
 
-  console.log("withdraw dyWavax from SingleFarmingVault");
-  await getTotalSupply(dyWavax);
-  await getBalance(wavax, accounts[0].address, "WAVAX");
+    console.log("withdraw dyWavax from SingleFarmingVault");
+    await getTotalSupply(dyWavax);
+    await getBalance(wavax, accounts[0].address, "WAVAX");
+  }
+  // earn
+  {
+    await dyWavax.connect(accounts[0]).earn({
+      gasLimit: 40e4,
+    });
+  }
+  // syncDeposit
+
+  // withdrawCall
 }
 
 createVault(hre)

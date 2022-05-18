@@ -83,12 +83,15 @@ constructor(address _underlying,
     IERC20(underlying).safeTransfer(_to, r);
   }
 
+  /**
+    * @notice earn
+  */
   function earn() public override {
-    uint b = IERC20(underlying).balanceOf(address(this));
+    uint balance = IERC20(underlying).balanceOf(address(this));
 
     address strategy = IController(controller).strategies(underlying);
     if (strategy != address(0)) {
-      IERC20(underlying).safeTransfer(strategy, b);
+      IERC20(underlying).safeTransfer(strategy, balance);
       IStrategy(strategy).deposit();
     }
   }
