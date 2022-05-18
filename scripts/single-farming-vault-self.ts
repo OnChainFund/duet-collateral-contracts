@@ -47,6 +47,15 @@ export async function createVault(hre: HardhatRuntimeEnvironment) {
     }
   );
 
+  // withdraw 之前 deposit 的
+  const wavaxBalance = await getBalance(wavax, accounts[0].address, "WAVAX");
+  console.log("withdrawing all AVAX from WAVAX");
+  await wavax
+    .connect(accounts[0])
+    .withdraw((BigInt(Number(wavaxBalance) * 1e18)-BigInt(1)), { gasLimit: 40e4 });
+  await getBalance(wavax, accounts[0].address, "WAVAX");
+
+  console.log("withdrawed all AVAX from WAVAX");
   // deposit
   await getBalance(wavax, accounts[0].address, "WAVAX");
   console.log("exchanging AVAX to WAVAX");
@@ -66,7 +75,7 @@ export async function createVault(hre: HardhatRuntimeEnvironment) {
       //gasPrice: 20e14,
     });
 
-  console.log("deposit dyWavax into SingleFarmingVault");
+  console.log("deposited dyWavax into SingleFarmingVault");
   await getTotalSupply(dyWavax);
   await getBalance(wavax, accounts[0].address, "WAVAX");
   // withdraw from vault
