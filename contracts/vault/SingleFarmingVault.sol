@@ -59,20 +59,35 @@ contract SingleFarmingVault is DepositVaultBase {
     require(receipt != address(0), "receipt is empty");
     IERC20Upgradeable(underlying).safeTransfer(receipt, amount);
   }
-
+  /**
+    * @notice 存款
+    * @param dytoken 合约地址 
+    * @param amount 存款金額
+    */
   function deposit(address dytoken, uint256 amount) external virtual override {
     require(dytoken == address(underlying), "TOKEN_UNMATCH");
     underlyingTransferIn(msg.sender, amount);
     _deposit(msg.sender, amount);
   }
 
+  /**
+    * @notice 存款給其他地址
+    * @param dytoken 合约地址 
+    * @param to 存款轉移對象合约地址 
+    * @param amount 存款金額
+    */
   function depositTo(address dytoken, address to, uint256 amount) external {
     require(dytoken == address(underlying), "TOKEN_UNMATCH");
     underlyingTransferIn(msg.sender, amount);
     _deposit(to, amount);
   }
 
-  // call from dToken
+  /**
+    * @notice 同步存款 
+    * @param dytoken 合约地址 
+    * @param amount 存款金額
+    * @param user 存入者地址
+    */
   function syncDeposit(address dytoken, uint256 amount, address user) external virtual override {
     address vault = IController(controller).dyTokenVaults(dytoken);
     require(msg.sender == underlying && dytoken == address(underlying), "TOKEN_UNMATCH");
@@ -88,15 +103,26 @@ contract SingleFarmingVault is DepositVaultBase {
   function withdraw(uint256 amount, bool unpack) external {
     _withdraw(msg.sender, amount, unpack);
   }
-
+  /**
+    * @notice 取款給非提取者地址
+    * @param to 取款地址 
+    * @param amount 提取数量
+    * @param unpack 是否解包 underlying token
+  */
   function withdrawTo(address to, uint256 amount, bool unpack) external {
     _withdraw(to, amount, unpack);
   }
-
+  /**
+    * @notice (取款給非提取者地址(地址需實現IWithdrawCallee) + 呼叫)
+    * @param to 取款地址 
+    * @param amount 提取数量
+    * @param unpack 是否解包 underlying token
+    * @param data 回調資料
+  */
   function withdrawCall(address to, uint256 amount, bool unpack, bytes calldata data) external {
     uint actualAmount = _withdraw(to, amount, unpack);
     if (data.length > 0) {
-      address asset = unpack ? underlyingToken : underlying;
+      address asset = unpack ? underlyingToken : underlying;//
       IWithdrawCallee(to).execCallback(msg.sender, asset, actualAmount, data);
     }
   }
