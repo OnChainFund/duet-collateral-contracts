@@ -118,7 +118,10 @@ contract LpFarmingVault is DepositVaultBase {
   function liquidate(address liquidator, address borrower, bytes calldata data) external override {
     _liquidate(liquidator, borrower, data);
   }
-
+  /**
+    @notice 數量的價值
+    @param dp Discount 或 Premium
+  */
   function underlyingAmountValue(uint _amount, bool dp) public view returns(uint value) {
     if(_amount == 0) {
       return 0;
