@@ -8,7 +8,7 @@ import { WAVAX, AVAX_USD_CHAINLINK } from "../utils/const";
 const deploySingleTokenUsdOracle: DeployFunction = async function (
   hre: HardhatRuntimeEnvironment
 ) {
-  // @ts-ignore
+  const accounts = await hre.ethers.getSigners();
   // deploy
   const { getNamedAccounts, deployments, network } = hre;
   const { deploy, log } = deployments;
@@ -35,7 +35,11 @@ const deploySingleTokenUsdOracle: DeployFunction = async function (
   const singleTokenUsdOracleContract = await ethers.getContract(
     "SingleTokenUsdOracle"
   );
-  await singleTokenUsdOracleContract.setOracle(WAVAX, AVAX_USD_CHAINLINK);
+  await singleTokenUsdOracleContract
+    .connect(accounts[0])
+    .setOracle(WAVAX, AVAX_USD_CHAINLINK, {
+      gasLimit: 20e4,
+    });
   console.log("setOracle");
 };
 

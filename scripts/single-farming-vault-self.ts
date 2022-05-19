@@ -51,15 +51,15 @@ export async function createVault(hre: HardhatRuntimeEnvironment) {
   {
     const wavaxBalance = await getBalance(wavax, accounts[0].address, "WAVAX");
     if (Number(wavaxBalance) > 0) {
-    console.log("withdrawing all AVAX from WAVAX");
-    await wavax
-      .connect(accounts[0])
-      .withdraw(BigInt(Number(wavaxBalance) * 1e18) - BigInt(1), {
-        gasLimit: 40e4,
-      });
-    await getBalance(wavax, accounts[0].address, "WAVAX");
+      console.log("withdrawing all AVAX from WAVAX");
+      await wavax
+        .connect(accounts[0])
+        .withdraw(BigInt(Number(wavaxBalance) * 1e18) - BigInt(1), {
+          gasLimit: 40e4,
+        });
+      await getBalance(wavax, accounts[0].address, "WAVAX");
 
-    console.log("withdrawed all AVAX from WAVAX");
+      console.log("withdrawed all AVAX from WAVAX");
     } else {
       console.log("no AVAX to withdraw");
     }
@@ -125,6 +125,32 @@ export async function createVault(hre: HardhatRuntimeEnvironment) {
     await getTotalSupply(dyWavax);
     await getBalance(wavax, accounts[1].address, "WAVAX");
   }
+
+  // underlyingAmountValue
+  {
+    console.log("underlyingAmountValue");
+    console.log(
+      formatUnits(
+        await singleFarmingVault.underlyingAmountValue(BigInt(1e18), true)
+      )
+    );
+  }
+
+  // userValue
+  {
+    console.log("userValue");
+    console.log(
+      formatUnits(await singleFarmingVault.underlyingAmountValue(1, true))
+    );
+  }
+
+  // pendingValue
+  {
+    console.log("pendingValue");
+    console.log(
+      formatUnits(await singleFarmingVault.underlyingAmountValue(1, true))
+    );
+  }
   // withdrawTo
   {
     await singleFarmingVault
@@ -143,9 +169,6 @@ export async function createVault(hre: HardhatRuntimeEnvironment) {
       gasLimit: 40e4,
     });
   }
-  // syncDeposit
-
-  // withdrawCall
 }
 
 createVault(hre)
