@@ -16,6 +16,8 @@ const deploySingleFarmingVault: DeployFunction = async function (
   const accounts = await hre.ethers.getSigners();
 
   const appController = await ethers.getContract("AppController");
+  const singleFarmingVault = await ethers.getContract("SingleFarmingVault");
+  const dyWavax = await ethers.getContract("DYTokenERC20");
   const singleFarmingVaultContract = await ethers.getContract(
     "SingleFarmingVault"
   );
@@ -25,6 +27,12 @@ const deploySingleFarmingVault: DeployFunction = async function (
     .connect(accounts[0])
     .initValidVault([singleFarmingVaultContract.address], [2]);
   console.log("initValidVault");
+
+  // set vault to dyToken
+  await appController
+    .connect(accounts[0])
+    .setVault(dyWavax.address, singleFarmingVault.address, 1);
+  console.log("appController setVault");
 
   // setOracles
   const singleTokenUsdOracle = await ethers.getContract("SingleTokenUsdOracle");

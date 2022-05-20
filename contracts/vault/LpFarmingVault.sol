@@ -160,8 +160,12 @@ contract LpFarmingVault is DepositVaultBase {
     return underlyingAmountValue(deposits[user], dp);
   }
 
-  // amount > 0 : deposit
-  // amount < 0 : withdraw  
+
+  /**
+    * @notice 用戶存入/提取操作後的價值
+    * @param user 用戶地址
+    * @param amount 操作數量( > 0 : 存入, < 0 : 提取)
+  */
   function pendingValue(address user, int amount) external override view returns(uint) {
     if (amount >= 0) {
       return underlyingAmountValue(deposits[user] + uint(amount), true);

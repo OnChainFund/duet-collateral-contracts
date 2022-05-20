@@ -20,7 +20,7 @@ contract AppController is Constants, IController, OwnableUpgradeable {
 
   // underlying => dToken
   mapping(address => address) public override dyTokens;
-  // underlying => IStratege
+  // underlying => IStratege (token => yield strategy)
   mapping(address => address) public strategies;
 
   struct ValueConf {

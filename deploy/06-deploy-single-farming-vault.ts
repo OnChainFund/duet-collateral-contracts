@@ -43,7 +43,22 @@ const deploySingleFarmingVault: DeployFunction = async function (
       //gasPrice: 20e14,
     });
   log(`Delegating to ${deployer}`);
-
+  // 設定 vault 狀態
+  await appController.connect(accounts[0]).setVaultStates(
+    singleFarmingVault.address,
+    {
+      enabled: true,
+      enableDeposit: true,
+      enableWithdraw: true,
+      enableBorrow: true,
+      enableRepay: true,
+      enableLiquidate: true,
+    },
+    {
+      gasLimit: 20e4,
+      //gasPrice: 20e14,
+    }
+  );
 };
 
 export default deploySingleFarmingVault;

@@ -24,11 +24,7 @@ export async function createVault(hre: HardhatRuntimeEnvironment) {
     ethers.provider
   );
 
-  // setVault (deposite 前要先在 controller 設定哪個 dyToken 對應到哪個 vault)
-  await appController
-    .connect(accounts[0])
-    .setVault(dyWavax.address, singleFarmingVault.address, 1);
-  console.log("appController setVault");
+  // setVault (deposite 前要先在 controller 設定哪個 dyToken 對應到哪個 vault)->放到部署腳本中
 
   // 設定 vault 狀態
   await appController.connect(accounts[0]).setVaultStates(

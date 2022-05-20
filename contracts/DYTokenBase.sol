@@ -80,14 +80,18 @@ abstract contract DYTokenBase is IDYToken, ERC20, ERC20Permit, Ownable {
     }
     
   }
-
+  /**
+    * @notice partition ratio of amount 
+  */
   function underlyingAmount(uint amount) public virtual override view returns (uint) {
     if (totalSupply() == 0) {
       return 0;
     }
     return underlyingTotal() * amount / totalSupply();
   }
-
+  /**
+    * @notice partition ratio of user 
+  */
   function balanceOfUnderlying(address _user) public virtual override view returns (uint) {
     if (balanceOf(_user) >  0) {
       return underlyingTotal() * balanceOf(_user) / totalSupply();

@@ -84,7 +84,7 @@ constructor(address _underlying,
   }
 
   /**
-    * @notice earn
+    * @notice transfer all underlying asset to yield strategy 
   */
   function earn() public override {
     uint balance = IERC20(underlying).balanceOf(address(this));

@@ -14,22 +14,29 @@ const dyTokenERC20: DeployFunction = async function (
   log("----------------------------------------------------");
   log("Deploying DYWAVAX and waiting for confirmations...");
   const appController = await ethers.getContract("AppController");
-  const lpFarmingVault = await deploy("DYTokenERC20", {
+  const dYTokenERC20 = await deploy("DYTokenERC20", {
     from: deployer,
     args: [WAVAX, "WAVAX", appController.address],
     log: true,
     // we need to wait if on a live network so we can verify properly
     waitConfirmations: networkConfig[network.name].blockConfirmations || 1,
   });
-  log(`DYWAVAX at ${lpFarmingVault.address}`);
+  log(`Deploying DYWAVAX at ${dYTokenERC20.address}`);
+  // setController (上面 init 時候就有設定過了, 這裡再重設定一次做檢查)
+  const dYTokenERC20Contract = await ethers.getContract("DYTokenERC20");
+  const accounts = await hre.ethers.getSigners();
+  await dYTokenERC20Contract
+    .connect(accounts[0])
+    .setController(appController.address);
+
+  // verified
   if (
     !developmentChains.includes(network.name) &&
     process.env.ETHERSCAN_API_KEY
   ) {
-    await verify(lpFarmingVault.address, []);
-    log(`Verified contract ${lpFarmingVault.address}`);
+    await verify(dYTokenERC20.address, []);
+    log(`Verified contract ${dYTokenERC20.address}`);
   }
-  log(`Delegating to ${deployer}`);
 };
 
 export default dyTokenERC20;
