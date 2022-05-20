@@ -13,7 +13,18 @@ TODO:
     - [ ] underlyingAmountValue
     - [ ] userValue
     - [ ] pendingValue
-  - [ ] LpFarmingVault 所有功能
+  - [x] LpFarmingVault 所有功能
+    - [ ] initialize
+    - [x] deposit
+    - [x] depositTo
+    - [x] syncDeposit
+    - [x] withdraw
+    - [x] withdrawTo
+    - [x] withdrawCall
+    - [ ] liquidate
+    - [ ] underlyingAmountValue
+    - [ ] userValue
+    - [ ] pendingValue
   - [ ] BTCMintVault 所有功能
 - [ ] 操作 strategy
   - [ ] Strategy2ForPancakeLP 所有功能
@@ -24,16 +35,16 @@ TODO:
     - [x] deposit
     - [x] depositTo
     - [x] withdraw
-    - [x] earn
-  - [ ] DYTokenBase 所有功能
-    - [ ] decimals
-    - [ ] burn
-    - [ ] send
-    - [ ] setController
-    - [ ] underlyingTotal
-    - [ ] underlyingAmount
-    - [ ] balanceOfUnderlying
-    - [ ] pricePerShare
+    - [ ] earn (later -> after strategy)
+  - [x] DYTokenBase 所有功能
+    - [x] decimals
+    - [x] burn
+    - [x] send
+    - [x] setController
+    - [x] underlyingTotal
+    - [x] underlyingAmount
+    - [x] balanceOfUnderlying
+    - [x] pricePerShare
   - [ ] FeeConf 所有功能
 
 
