@@ -60,7 +60,7 @@ contract LpFarmingVault is DepositVaultBase {
     IERC20Upgradeable(underlying).safeTransferFrom(sender, address(this), amount);
   }
 
-  /*
+  /** 
     * @notice transfer underlying token (internal method)
     * @param receipt receipt address
     * @param amount amount to transfer
@@ -74,27 +74,27 @@ contract LpFarmingVault is DepositVaultBase {
     require(receipt != address(0), "receipt is empty");
     IERC20Upgradeable(underlying).safeTransfer(receipt, amount);
   }
-  /*
+  /**
     * @notice deposite
-    * @param receipt receipt address
+    * @param  dytoken Lp token address
     * @param amount amount to transfer
     */
-  function deposit(address dtoken, uint256 amount) external virtual override {
-    require(dtoken == address(underlying), "TOKEN_UNMATCH");
+  function deposit(address dytoken, uint256 amount) external virtual override {
+    require(dytoken == address(underlying), "TOKEN_UNMATCH");
     underlyingTransferIn(msg.sender, amount);
     _deposit(msg.sender, amount);
   }
 
-  function depositTo(address dtoken, address to, uint256 amount) external {
-    require(dtoken == address(underlying), "TOKEN_UNMATCH");
+  function depositTo(address dytoken, address to, uint256 amount) external {
+    require(dytoken == address(underlying), "TOKEN_UNMATCH");
     underlyingTransferIn(msg.sender, amount);
     _deposit(to, amount);
   }
 
   // call from dToken
-  function syncDeposit(address dtoken, uint256 amount, address user) external virtual override {
-    address vault = IController(controller).dyTokenVaults(dtoken);
-    require(msg.sender == underlying && dtoken == address(underlying), "TOKEN_UNMATCH");
+  function syncDeposit(address dytoken, uint256 amount, address user) external virtual override {
+    address vault = IController(controller).dyTokenVaults(dytoken);
+    require(msg.sender == underlying && dytoken == address(underlying), "TOKEN_UNMATCH");
     require(vault == address(this), "VAULT_UNMATCH");
     _deposit(user, amount);
   }
