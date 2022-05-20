@@ -163,6 +163,8 @@ abstract contract DepositVaultBase is Constants, IVault, IDepositVault, OwnableU
     * @param borrower 借款人
     */
   function _liquidate(address liquidator, address borrower, bytes calldata data) internal virtual nonReentrant{
+    // 只有 controller(AppController) 可以清算
+    // 所以是 controller 可以调用(幫 liquidator 清算)
     require(msg.sender == controller, "LIQUIDATE_INVALID_CALLER");
     require(liquidator != borrower, "LIQUIDATE_DISABLE_YOURSELF");
 
@@ -173,6 +175,7 @@ abstract contract DepositVaultBase is Constants, IVault, IDepositVault, OwnableU
     if (supplies > 0) {
       uint256 toLiquidatorAmount = supplies;
       (address liqReceiver, uint liqFee) = feeConf.getConfig("liq_fee");
+      // 如果沒有設置 liqReceiver 
       if (liqFee > 0 && liqReceiver != address(0)) {
         uint fee = supplies * liqFee / PercentBase;
         toLiquidatorAmount = toLiquidatorAmount - fee;

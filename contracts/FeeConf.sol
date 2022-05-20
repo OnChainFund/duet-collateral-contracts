@@ -20,7 +20,7 @@ contract FeeConf is Constants, Ownable {
     setConfig("yield_fee", receiver, 2000); // 20%
     setConfig("borrow_fee", receiver, 50);  // 0.5%
     setConfig("repay_fee", receiver, 100);  // 1%
-  // setConfig("liq_fee", receiver, 100);  // 0%
+    //setConfig("liq_fee", receiver, 100);  // 1%
   }
 
   function setConfig(bytes32 _key, address _receiver, uint16 _rate) public onlyOwner {

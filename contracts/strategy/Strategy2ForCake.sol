@@ -85,7 +85,9 @@ contract Strategy2ForCake is BaseStrategy {
     emit Withdraw(amount);
   }
 
-  function harvest() public virtual override {}
+  function harvest() public virtual override {
+      // 怎麼沒東西
+  }
 
   function sendYieldFee(uint liquidity) internal returns (uint fee) {
     (address feeReceiver, uint yieldFee) = feeConf.getConfig("yield_fee");
