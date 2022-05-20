@@ -1,5 +1,6 @@
 TODO:
 ## 操作
+### Vault
 - [ ] 操作 vault code
   - [ ] SingleFarmingVault 所有功能
     - [x] initialize
@@ -26,9 +27,34 @@ TODO:
     - [ ] userValue
     - [ ] pendingValue
   - [ ] BTCMintVault 所有功能
+
+### Strategy
 - [ ] 操作 strategy
+  - [ ] BaseStrategy
+    - [ ] setMinHarvestAmount
+    - [ ] setController
+    - [ ] setFeeConf
+    - [ ] inCaseTokensGetStuck (token 被暫停的時候,管理員手動去做)
+    - [ ] safeTransfer
   - [ ] Strategy2ForPancakeLP 所有功能
-  - [ ] 
+    - [ ] doApprove
+    - [ ] balanceOfPool
+    - [ ] pendingOutput
+    - [ ] deposit
+    - [ ] harvest
+    - [ ] withdraw
+    - [ ] withdrawAll
+    - [ ] emergency
+    - [ ] setToken0Path
+    - [ ] setToken1Path
+  - [ ] Strategy2ForCake 所有功能 (功能還並不完善?)
+    - [ ] balanceOfPool
+    - [ ] pendingOutput
+    - [ ] deposit
+    - [ ] withdraw
+    - [ ] withdrawAll
+    - [ ] emergency
+    - [ ] sendYieldFee
 - [ ] 操作 app code
   - [ ] AppController 所有功能
   - [x] DYTokenERC20 所有功能
