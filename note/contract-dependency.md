@@ -121,3 +121,27 @@ __ReentrancyGuard_init_unchained
 防止合約直接或間接調用自身。
 不支持從另一個 `nonReentrant` 函數調用 `nonReentrant` 函數。
 可以通過將 `nonReentrant` 函數設置為外部函數並使其調用執行實際工作的 `private` 函數來防止這種情況發生。
+
+### ERC20
+
+functions:
+- public
+  - name
+  - symbol
+  - decimals
+  - totalSupply
+  - balanceOf
+  - transfer
+  - allowance
+  - approve
+  - transferFrom
+  - increaseAllowance
+  - decreaseAllowance
+- internal
+  - _transfer
+  - _mint
+  - _burn
+  - _approve
+  - _spendAllowance
+  - _beforeTokenTransfer
+  - _afterTokenTransfer
