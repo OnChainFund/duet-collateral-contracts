@@ -26,6 +26,20 @@ TODO:
     - [ ] underlyingAmountValue
     - [ ] userValue
     - [ ] pendingValue
+  - [ ] MintVault 所有功能
+    - internal
+      - [ ] underlyingMint
+      - [ ] underlyingBurn
+    - external
+      - borrow
+      - tokensReceived
+      - repay
+      - repayTo
+      - liquidate
+      - valueToAmount
+      - underlyingAmountValue
+      - userValue
+      - pendingValue
   - [ ] BTCMintVault 所有功能
 
 ### Strategy
