@@ -1,5 +1,13 @@
 TODO:
 ## 操作
+### Asset
+- [ ] 操作 Asset
+  - [ ] DUSD 所有功能
+    - [x] addMiner
+    - [x] removeMiner
+    - [x] mint
+    - [x] burn
+    - [ ] send
 ### Vault
 - [ ] 操作 vault code
   - [ ] SingleFarmingVault 所有功能
