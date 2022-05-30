@@ -31,15 +31,15 @@ TODO:
       - [ ] underlyingMint
       - [ ] underlyingBurn
     - external
-      - borrow
-      - tokensReceived
-      - repay
-      - repayTo
-      - liquidate
-      - valueToAmount
-      - underlyingAmountValue
-      - userValue
-      - pendingValue
+      - [ ] borrow
+      - [ ] tokensReceived
+      - [ ] repay
+      - [ ] repayTo
+      - [ ] liquidate
+      - [ ] valueToAmount
+      - [ ] underlyingAmountValue
+      - [ ] userValue
+      - [ ] pendingValue
   - [ ] BTCMintVault 所有功能
 
 ### Strategy
