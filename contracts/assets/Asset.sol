@@ -8,7 +8,7 @@ import "@openzeppelin/contracts/utils/Address.sol";
 
 import "../interfaces/TokenRecipient.sol";
 
-contract DUSD is ERC20, ERC20Permit, Ownable {
+contract Asset is ERC20, ERC20Permit, Ownable {
     using Address for address;
 
     mapping(address => bool) public miners;
