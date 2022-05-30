@@ -29,6 +29,50 @@ const deployMintVault: DeployFunction = async function (
     log(`Verified contract ${mintVault.address}`);
   }
   log(`Delegating to ${deployer}`);
+
+  // init
+  const accounts = await hre.ethers.getSigners();
+  const feeConf = await ethers.getContract("FeeConf");
+  const DUSD = await ethers.getContract("DUSD");
+  const appController = await ethers.getContract("AppController");
+  const mintVaultContract = await ethers.getContract("MintVault");
+  await mintVaultContract
+    .connect(accounts[0])
+    .initialize(appController.address, feeConf.address, DUSD.address, {
+      gasLimit: 20e4,
+      //gasPrice: 20e14,
+    });
+  log(`Delegating to ${deployer}`);
+  // 設定 vault 狀態
+  await appController.connect(accounts[0]).setVaultStates(
+    mintVault.address,
+    {
+      enabled: true,
+      enableDeposit: true,
+      enableWithdraw: true,
+      enableBorrow: true,
+      enableRepay: true,
+      enableLiquidate: true,
+    },
+    {
+      gasLimit: 20e4,
+      //gasPrice: 20e14,
+    }
+  );
+
+  // add minter (MintVault) to dtoken
+  await DUSD.connect(accounts[0]).addMiner(mintVault.address, {
+    gasLimit: 20e4,
+    //gasPrice: 20e14,
+  });
+  log("add minter to mintVault");
+
+  // add minter (accounts[0]) to dtoken
+  await DUSD.connect(accounts[0]).addMiner(accounts[0].address, {
+    gasLimit: 20e4,
+    //gasPrice: 20e14,
+  });
+  log("add minter to accounts[0]");
 };
 
 export default deployMintVault;
