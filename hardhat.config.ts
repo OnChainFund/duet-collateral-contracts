@@ -12,6 +12,7 @@ import "hardhat-deploy";
 import "solidity-coverage";
 import { HardhatUserConfig } from "hardhat/config";
 import { task } from "hardhat/config";
+import "hardhat-tracer";
 
 task("accounts", "Prints the list of accounts", async (taskArgs, hre) => {
   const accounts = await hre.ethers.getSigners();
@@ -68,6 +69,13 @@ const config: HardhatUserConfig = {
       chainId: 43113,
       gasPrice: 225000000000,
       url: "https://api.avax-test.network/ext/bc/C/rpc",
+    },
+  },
+  tracer: {
+    nameTags: {
+      ["0x3b7157E5E732863170597790b4c005436572570F"]: "TokenSale",
+      ["0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2"]: "WrappedEther",
+      ["0xe760f546a925a4cfdcc62a674d14cc42a676c06f"]: "Someone",
     },
   },
 };
