@@ -1,8 +1,8 @@
 TODO:
 ## 操作
 ### Asset
-- [ ] 操作 Asset
-  - [ ] DUSD 所有功能
+- [x] 操作 Asset
+  - [x] DUSD 所有功能
     - [x] addMiner
     - [x] removeMiner
     - [x] mint
@@ -94,8 +94,44 @@ TODO:
     - [x] balanceOfUnderlying
     - [x] pricePerShare
   - [ ] FeeConf 所有功能
-
-
+### Controller
+- [ ] 操作 vault code
+  - [ ] AppController 所有功能
+    - [x] initialize
+    - [x] setDYToken
+    - [ ] setStrategy
+    - [ ] emergencyWithdrawAll
+      - [ ] vault
+        - [ ] setOpenLiquidate
+        - [ ] updateAllowedLiquidator
+        - [ ] setLiquidateRate
+        - [ ] setCollateralRate
+        - [ ] setOracles
+        - [ ] getValueConfs
+        - [ ] getValueConf
+        - [ ] setVault
+        - [ ] joinVault
+        - [ ] exitVault
+        - [ ] setVaultStates
+        - [ ] initValidVault
+        - [ ] setValidVault
+        - [ ] userJoinedVaultInfoAt
+        - [ ] userJoinedVaultCount
+        - [ ] maxBorrow
+        - [ ] userValues
+        - [ ] userPendingValues
+        - [ ] userTotalPendingValues
+        - [ ] isNeedLiquidate
+        - [ ] accVaultVaule
+        - [ ] accValidVaultVaule
+        - [ ] accPendingValue
+        - [ ] accValidPendingValue
+        - [ ] isCollateralizedVault
+        - [ ] beforeDeposit
+        - [ ] beforeBorrow
+        - [ ] beforeWithdraw
+        - [ ] beforeRepay
+        - [ ] liquidateㄈ 
 ## Test
 
 ### 單元測試
