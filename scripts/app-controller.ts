@@ -13,8 +13,10 @@ export async function createVault(hre: HardhatRuntimeEnvironment) {
   // 內部合約
   const appController = await ethers.getContract("AppController");
   const feeConf = await ethers.getContract("FeeConf");
-  const singleFarmingVault = await ethers.getContract("SingleFarmingVault");
+  const MintVault = await ethers.getContract("MintVault");
   const dyWavax = await ethers.getContract("DYTokenERC20");
+  const singleFarmingVault = await ethers.getContract("SingleFarmingVault");
+  const dusd = await ethers.getContract("DUSD");
 }
 
 createVault(hre)

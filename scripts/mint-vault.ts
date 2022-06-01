@@ -15,6 +15,40 @@ export async function createVault(hre: HardhatRuntimeEnvironment) {
   const feeConf = await ethers.getContract("FeeConf");
   const MintVault = await ethers.getContract("MintVault");
   const dyWavax = await ethers.getContract("DYTokenERC20");
+  const singleFarmingVault = await ethers.getContract("SingleFarmingVault");
+  const dusd = await ethers.getContract("DUSD");
+
+  // 設定 vault 狀態
+  await appController.connect(accounts[0]).setVaultStates(
+    MintVault.address,
+    {
+      enabled: true,
+      enableDeposit: true,
+      enableWithdraw: true,
+      enableBorrow: true,
+      enableRepay: true,
+      enableLiquidate: true,
+    },
+    {
+      gasLimit: 20e4,
+      //gasPrice: 20e14,
+    }
+  );
+  // borrow
+  {
+    await MintVault.connect(accounts[0]).borrow(BigInt(1e18), {
+      gasLimit: 40e4,
+      //gasPrice: 20e14,
+    });
+  }
+  // tokensReceived
+  // repay
+  // repayTo
+  // liquidate
+  // valueToAmount
+  // underlyingAmountValue
+  // userValue
+  // pendingValue
 }
 
 createVault(hre)

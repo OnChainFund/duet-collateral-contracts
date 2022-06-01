@@ -4,7 +4,7 @@ import verify from "../helper-functions";
 import { networkConfig, developmentChains } from "../helper-hardhat-config";
 import { ethers } from "hardhat";
 
-const deploySingleFarmingVault: DeployFunction = async function (
+const deploysingleFarmingVaultUSDC: DeployFunction = async function (
   hre: HardhatRuntimeEnvironment
 ) {
   // @ts-ignore
@@ -12,40 +12,40 @@ const deploySingleFarmingVault: DeployFunction = async function (
   const { deploy, log } = deployments;
   const { deployer } = await getNamedAccounts();
   log("----------------------------------------------------");
-  log("Deploying SingleFarmingVault and waiting for confirmations...");
-  const singleFarmingVault = await deploy("SingleFarmingVault", {
+  log("Deploying singleFarmingVaultUSDC and waiting for confirmations...");
+  const singleFarmingVaultUSDC = await deploy("singleFarmingVaultUSDC", {
     from: deployer,
     args: [],
     log: true,
     // we need to wait if on a live network so we can verify properly
     waitConfirmations: networkConfig[network.name].blockConfirmations || 1,
   });
-  log(`SingleFarmingVault at ${singleFarmingVault.address}`);
+  log(`singleFarmingVaultUSDC at ${singleFarmingVaultUSDC.address}`);
   if (
     !developmentChains.includes(network.name) &&
     process.env.ETHERSCAN_API_KEY
   ) {
-    await verify(singleFarmingVault.address, []);
-    log(`Verified contract ${singleFarmingVault.address}`);
+    await verify(singleFarmingVaultUSDC.address, []);
+    log(`Verified contract ${singleFarmingVaultUSDC.address}`);
   }
   // init
   const accounts = await hre.ethers.getSigners();
   const feeConf = await ethers.getContract("FeeConf");
-  const DYWAVAX = await ethers.getContract("DYTokenERC20");
+  const DYUSDC = await ethers.getContract("DYTokenERC20");
   const appController = await ethers.getContract("AppController");
-  const singleFarmingVaultContract = await ethers.getContract(
-    "SingleFarmingVault"
+  const singleFarmingVaultUSDCContract = await ethers.getContract(
+    "singleFarmingVaultUSDC"
   );
-  await singleFarmingVaultContract
+  await singleFarmingVaultUSDCContract
     .connect(accounts[0])
-    .initialize(appController.address, feeConf.address, DYWAVAX.address, {
+    .initialize(appController.address, feeConf.address, DYUSDC.address, {
       gasLimit: 20e4,
       //gasPrice: 20e14,
     });
   log(`Delegating to ${deployer}`);
   // 設定 vault 狀態
   await appController.connect(accounts[0]).setVaultStates(
-    singleFarmingVault.address,
+    singleFarmingVaultUSDC.address,
     {
       enabled: true,
       enableDeposit: true,
@@ -61,5 +61,5 @@ const deploySingleFarmingVault: DeployFunction = async function (
   );
 };
 
-export default deploySingleFarmingVault;
-deploySingleFarmingVault.tags = ["all", "controller"];
+export default deploysingleFarmingVaultUSDC;
+deploysingleFarmingVaultUSDC.tags = ["all", "controller"];

@@ -19,7 +19,7 @@ contract AppController is Constants, IController, OwnableUpgradeable {
 
     // underlying => dToken
     mapping(address => address) public override dyTokens;
-    // underlying => IStratege (token => yield strategy)
+    // underlying => IStratege (dytoken => yield strategy)
     mapping(address => address) public strategies;
 
     struct ValueConf {
@@ -36,10 +36,10 @@ contract AppController is Constants, IController, OwnableUpgradeable {
 
     // user => vaults
     mapping(address => EnumerableSet.AddressSet)
-        internal userJoinedDepositVaults;
+        internal userJoinedDepositVaults;// user joined deposit vaults
 
     mapping(address => EnumerableSet.AddressSet)
-        internal userJoinedBorrowVaults;
+        internal userJoinedBorrowVaults;// user joined borrow vaults
 
     // manage Vault state for risk control
     struct VaultState {
@@ -579,7 +579,7 @@ contract AppController is Constants, IController, OwnableUpgradeable {
      * @param _dp Discount or Premium
      */
     function accValidVaultVaule(address _user, bool _dp)
-        internal
+        public
         view
         returns (uint256 totalValue)
     {
@@ -758,9 +758,10 @@ contract AppController is Constants, IController, OwnableUpgradeable {
             );
         }
     }
+
     /**
      * @notice Risk control check before repay
-     * @param  _repayer repayer 
+     * @param  _repayer repayer
      * @param _vault address of loan market
      * @param  _amount loan amount
      */

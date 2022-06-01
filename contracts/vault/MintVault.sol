@@ -14,6 +14,12 @@ contract MintVault is TokenRecipient, MintVaultBase {
   using SafeERC20Upgradeable for IERC20Upgradeable;
   uint internal decimalScale;
 
+  /**
+   * @notice initialize 
+   * @param  _controller app controller which controll the vault
+   * @param _feeConf fee configuration of the vault
+   * @param  _underlying the underlying token managed by this vault(dToken) 
+   */
   function initialize(
     address _controller,
     address _feeConf,
