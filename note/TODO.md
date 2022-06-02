@@ -39,8 +39,8 @@ TODO:
       - [ ] underlyingMint
       - [ ] underlyingBurn
     - external
-      - [ ] borrow
-      - [ ] tokensReceived
+      - [x] borrow
+      - [ ] tokensReceived (也是一種 repay)
       - [ ] repay
       - [ ] repayTo
       - [ ] liquidate

@@ -36,7 +36,7 @@ const deployMintVault: DeployFunction = async function (
   const singleTokenUsdOracle = await ethers.getContract("SingleTokenUsdOracle");
   await appController
     .connect(accounts[0])
-    .setOracles(AEUR.address, singleTokenUsdOracle.address, 0, 10000);
+    .setOracles(AEUR.address, singleTokenUsdOracle.address, 100, 100);
   console.log("set Oracle to Vault");
 
   // set oracle to chainlink

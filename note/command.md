@@ -14,7 +14,7 @@ script
 yarn hardhat run scripts/single-farming-vault.ts --network localhost
 
 yarn hardhat run scripts/mint-vault.ts --network localhost          
-
+yarn hardhat run scripts/utils/deposit-collecteral.ts --network localhost          
 yarn hardhat run scripts/app-controller.ts --network localhost          
 ```
 

@@ -38,7 +38,7 @@ const deploySingleFarmingVault: DeployFunction = async function (
   const singleTokenUsdOracle = await ethers.getContract("SingleTokenUsdOracle");
   await appController
     .connect(accounts[0])
-    .setOracles(WAVAX, singleTokenUsdOracle.address, 0, 10000);
+    .setOracles(WAVAX, singleTokenUsdOracle.address, 100, 100);
   console.log("set Oracle to Vault");
 };
 

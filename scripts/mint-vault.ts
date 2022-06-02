@@ -7,6 +7,8 @@ import {
   getTotalSupply,
   getUserValue,
   getDeposit,
+  borrow,
+  accValidVaultVaule,
 } from "./utils/utils";
 import { USDC, WAVAX, ZERO } from "../utils/const";
 import { formatUnits } from "ethers/lib/utils";
@@ -25,47 +27,43 @@ export async function createVault(hre: HardhatRuntimeEnvironment) {
   const AEUR = await ethers.getContract("Asset");
 
   // 設定 vault 狀態
-  await appController.connect(accounts[0]).setVaultStates(
-    mintVault.address,
-    {
-      enabled: true,
-      enableDeposit: true,
-      enableWithdraw: true,
-      enableBorrow: true,
-      enableRepay: true,
-      enableLiquidate: true,
-    },
-    {
-      gasLimit: 20e4,
-      //gasPrice: 20e14,
-    }
-  );
+  // await appController.connect(accounts[0]).setVaultStates(
+  //   mintVault.address,
+  //   {
+  //     enabled: true,
+  //     enableDeposit: true,
+  //     enableWithdraw: true,
+  //     enableBorrow: true,
+  //     enableRepay: true,
+  //     enableLiquidate: true,
+  //   },
+  //   {
+  //     gasLimit: 20e4,
+  //     //gasPrice: 20e14,
+  //   }
+  // );
 
   // borrow
   {
-    console.log("check value conf");
-    await appController.getValueConf(AEUR.address);
-    console.log("=================")
-    const deposit = await getDeposit(singleFarmingVault, accounts[0].address);
-    const userValue = await getUserValue(
-      singleFarmingVault,
-      accounts[0].address,
-      false
-    );
-    await mintVault.connect(accounts[0]).borrow(BigInt(1e18), {
-      gasLimit: 40e4,
-      //gasPrice: 20e14,
-    });
 
-    await getTotalSupply(dyWavax);
+   await accValidVaultVaule(appController, accounts[0].address, true);
+   await getUserValue(singleFarmingVault, accounts[0].address, false);
+    console.log("=================");
+    console.log("borrow");
+    await borrow(mintVault, 0.0001, accounts[0]);
   }
-  // tokensReceived
+  await getBalance(AEUR, accounts[0].address, "AEUR");
+
+  // tokensReceived (也是一種 repay)
   // repay
   // repayTo
   // liquidate
   // valueToAmount
   // underlyingAmountValue
   // userValue
+  {
+    await getUserValue(mintVault, accounts[0].address, false);
+  }
   // pendingValue
 }
 
