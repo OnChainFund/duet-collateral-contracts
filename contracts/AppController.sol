@@ -36,10 +36,10 @@ contract AppController is Constants, IController, OwnableUpgradeable {
 
     // user => vaults
     mapping(address => EnumerableSet.AddressSet)
-        internal userJoinedDepositVaults;// user joined deposit vaults
+        internal userJoinedDepositVaults; // user joined deposit vaults
 
     mapping(address => EnumerableSet.AddressSet)
-        internal userJoinedBorrowVaults;// user joined borrow vaults
+        internal userJoinedBorrowVaults; // user joined borrow vaults
 
     // manage Vault state for risk control
     struct VaultState {
@@ -194,7 +194,7 @@ contract AppController is Constants, IController, OwnableUpgradeable {
     }
 
     /**
-     * @notice set different oracle、 discount rate and premium rate for each underlying asset
+     * @notice set different oracle discount rate and premium rate for each underlying asset
      * @param _underlying underlying token address
      * @param _oracle oracle address
      * @param _discount discount rate

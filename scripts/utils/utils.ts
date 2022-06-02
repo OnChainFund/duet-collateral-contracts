@@ -24,8 +24,9 @@ export async function getUserValue(
   dp: boolean
 ) {
   const userVaule = formatUnits(await contract.userValue(address, dp));
-  console.log("user value is : " + userVaule);
-  return userVaule;
+  const userValueUSD = Number(userVaule) * 1e10;
+  console.log("user value is : " + userValueUSD);
+  return userValueUSD;
 }
 
 export async function getPrice(contract: any, address: string) {
@@ -33,4 +34,10 @@ export async function getPrice(contract: any, address: string) {
   const priceNumber: number = Number(priceString) * 1e10;
   console.log("price is : " + priceNumber);
   return priceNumber;
+}
+
+export async function getDeposit(contract: any, address: string) {
+  const deposit = formatUnits(await contract.deposits(address));
+  console.log("deposit is : " + deposit);
+  return deposit;
 }

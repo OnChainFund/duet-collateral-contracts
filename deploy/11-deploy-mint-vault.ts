@@ -33,12 +33,12 @@ const deployMintVault: DeployFunction = async function (
   // init
   const accounts = await hre.ethers.getSigners();
   const feeConf = await ethers.getContract("FeeConf");
-  const DUSD = await ethers.getContract("DUSD");
+  const AEUR = await ethers.getContract("Asset");
   const appController = await ethers.getContract("AppController");
   const mintVaultContract = await ethers.getContract("MintVault");
   await mintVaultContract
     .connect(accounts[0])
-    .initialize(appController.address, feeConf.address, DUSD.address, {
+    .initialize(appController.address, feeConf.address, AEUR.address, {
       gasLimit: 20e4,
       //gasPrice: 20e14,
     });
@@ -61,14 +61,14 @@ const deployMintVault: DeployFunction = async function (
   );
 
   // add minter (MintVault) to dtoken
-  await DUSD.connect(accounts[0]).addMiner(mintVault.address, {
+  await AEUR.connect(accounts[0]).addMiner(mintVault.address, {
     gasLimit: 20e4,
     //gasPrice: 20e14,
   });
   log("add minter to mintVault");
 
   // add minter (accounts[0]) to dtoken
-  await DUSD.connect(accounts[0]).addMiner(accounts[0].address, {
+  await AEUR.connect(accounts[0]).addMiner(accounts[0].address, {
     gasLimit: 20e4,
     //gasPrice: 20e14,
   });
